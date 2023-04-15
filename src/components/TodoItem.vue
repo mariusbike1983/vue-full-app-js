@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 import Button from './Button.vue'
   
 const props = defineProps({
@@ -14,26 +13,26 @@ const emits = defineEmits([
 ]);
   
 function onRemove() {
-  emits('item-removed', {id: props.id})
+  emits('item-removed', { id: props.id })
 }
   
 function onItemChange() {
-  emits('item-changed', {id: props.id })
+  emits('item-changed', { id: props.id })
 }
 </script>
 
 <template>
-  <div class="item" 
-       :class="{'is-completed': completed}">
-      <input type="checkbox"
-             :checked="completed"
-             @change="onItemChange">
-      <span> {{ text }} </span>
-      <Button 
-      	:text='"-"'
-        :type='"TYPE_2"'
-        @specialEvent="onRemove"/>
-  </div>
+    <div class="item" 
+        :class="{'is-completed': completed}">
+        <input type="checkbox"
+              :checked="completed"
+              @change="onItemChange">
+        <span> {{ text }} </span>
+        <Button 
+              :text='"-"'
+              :type='"TYPE_2"'
+              @specialEvent="onRemove"/>
+    </div>
 </template>
 
 <style scoped>
