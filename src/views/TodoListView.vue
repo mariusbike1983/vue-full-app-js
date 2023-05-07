@@ -2,7 +2,7 @@
 import { ref, watch, computed } from 'vue'
 import TodoList from '../components/TodoList.vue'
 import Button from '../components/Button.vue'
-import { loadData, createNewTodoItem } from '../data/loaddata.js'
+import { loadData, createNewTodoItem , loadExternalData} from '../data/loaddata.js'
 
 const newItemText     = ref("")
 const items           = ref(loadData())
@@ -11,12 +11,14 @@ const buttonRemove    = ref(null)
 const showCompleted   = ref(true)
 const bREnabled       = ref(false)
 const bAEnabled       = ref(false)
+const todoList        = ref(null)
 const showHideList    = computed(() => {
 	return showCompleted.value ? "Hide completed" : "Show completed"
 })
 const filteredItems   = computed(() => { 
 	return items.value.filter(item => showCompleted.value ? true: !item.completed)
 })
+const defaultPlaceholderText = "No items in list. Start adding one...";
   
 watch(items, 
   	(newValue, oldValue) => {
@@ -41,7 +43,8 @@ function onAdd() {
 }
 
 function onRemoveAll() {
-	items.value.splice(0, items.value.length);
+	items.value.splice(0);
+  todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
 }
   
 function onItemRemove(data) {
@@ -55,6 +58,17 @@ function onItemChanged(data) {
 	const item = items.value.find(el => el.id === data.id);
   if (item) {
   	item.completed = !item.completed;
+  }
+}
+
+async function onLoadExternalData() {
+  items.value.splice(0);
+  todoList.value.setTodoPlaceholderText("Loading...");
+  const newItems = await loadExternalData();
+  if (newItems.length > 0){
+    items.value.push(...newItems);
+  } else {
+    todoList.value.setTodoPlaceholderText("No elements loaded!");
   }
 }
 </script>
@@ -75,8 +89,13 @@ function onItemChanged(data) {
   <Button :text="showHideList"
           :type="'TYPE_1'"
           @specialEvent="showCompleted = !showCompleted"/>
-  <TodoList v-if="filteredItems.length > 0"
+  <Button :text="'Load external data'"
+          :type="'TYPE_1'"
+          @specialEvent="onLoadExternalData"/>
+  <TodoList
+        ref="todoList"
   			:items="filteredItems"
+        :placeholderText="defaultPlaceholderText"
         @item-removed="onItemRemove"
         @item-changed="onItemChanged"/>
 </template>
