@@ -52,6 +52,9 @@ function onItemRemove(data) {
   if (ndx >= 0) {
   	items.value.splice(ndx, 1);
   }
+  if (items.value.length === 0) {
+    todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
+  }
 }
   
 function onItemChanged(data) {
