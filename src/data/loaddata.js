@@ -22,12 +22,15 @@ async function loadExternalData() {
 
 function createNewTodoItem(itemText) {
     return {
-        id:   generateNextId(),
+        id:   _generateNextId(),
         text: itemText
     }
 }
 
-function generateNextId() {
+/**
+ *  Private methods, should not be called from the outside
+ */
+function _generateNextId() {
     window.nextId = window.nextId ? window.nextId + 1 : 1;
     return window.nextId;
 }

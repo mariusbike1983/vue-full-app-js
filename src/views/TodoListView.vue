@@ -78,7 +78,8 @@ async function onLoadExternalData() {
 
 <template>
   <h1>Todo list</h1>
-  <input v-model="newItemText" @keyup.enter="onAdd">
+  <input  v-model="newItemText" 
+          @keyup.enter="onAdd">
   <Button ref="buttonAdd"
           :text="'Add'"
           :type="'TYPE_1'"
