@@ -24,10 +24,12 @@ function onItemChange() {
 <template>
     <div class="item" 
         :class="{'is-completed': completed}">
-        <input type="checkbox"
-              :checked="completed"
-              @change="onItemChange">
-        <span> {{ text }} </span>
+        <div>
+          <input type="checkbox"
+                :checked="completed"
+                @change="onItemChange">
+          <span> {{ text }} </span>
+        </div>
         <Button 
               :text='"-"'
               :type='"TYPE_2"'
@@ -39,7 +41,9 @@ function onItemChange() {
   .item {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     border: 1px solid gray;
+    border-radius: 5px;
     background-color: lightgreen;
     margin: 5px;
     padding: 2px;
@@ -55,9 +59,5 @@ function onItemChange() {
   span {
     margin-left: 5px;
     margin-right: 10px;
-  }
-  
-  button {
-    margin-left: auto;
   }
 </style>

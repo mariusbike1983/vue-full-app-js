@@ -49,5 +49,7 @@ function onItemRemoved(data) {
     margin-top: 10px;
     padding: 2px;
     background-color: lightblue;
+    border: 1px solid slategray;
+    border-radius: 5px;
   }
 </style>
