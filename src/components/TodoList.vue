@@ -1,10 +1,10 @@
-<script setup>
+<script setup> 
 import TodoItem from './TodoItem.vue'
 import { ref } from 'vue'
   
 const props = defineProps({
-	items: [],
-  placeholderText: ""
+	items:            [],
+  placeholderText:  ""
 })
 
 const container = ref(null)
@@ -16,13 +16,9 @@ const emits = defineEmits([
 ])
 
 defineExpose({
-  setTodoPlaceholderText: _todoListText
+  setTodoPlaceholderText: text => { placeholderTextValue.value = text; }
 })
 
-function _todoListText(text) {
-  placeholderTextValue.value = text;
-}
-  
 function onItemChanged(data) {
   emits('item-changed', { id: data.id })
 }
@@ -38,8 +34,8 @@ function onItemRemoved(data) {
         :id="item.id"
         :text="item.text"
         :completed="item.completed"
-        @item-removed="onItemRemoved"
-        @item-changed="onItemChanged"/>
+        @item-removed="onItemRemoved(item)"
+        @item-changed="onItemChanged(item)"/>
     <span v-if="items.length === 0">{{ placeholderTextValue }}</span>
   </div>
 </template>

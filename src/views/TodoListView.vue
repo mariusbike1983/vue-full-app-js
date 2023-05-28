@@ -78,24 +78,28 @@ async function onLoadExternalData() {
 
 <template>
   <h1>Todo list</h1>
-  <input  v-model="newItemText" 
-          @keyup.enter="onAdd">
-  <Button ref="buttonAdd"
-          :text="'Add'"
-          :type="'TYPE_1'"
-          :disabled="!bAEnabled"
-          @specialEvent="onAdd"/>
-  <Button ref="buttonRemove"
-          :text="'Remove all'"
-          :type="'TYPE_1'"
-          :disabled="!bREnabled"
-          @specialEvent="onRemoveAll"/>
-  <Button :text="showHideList"
-          :type="'TYPE_1'"
-          @specialEvent="showCompleted = !showCompleted"/>
-  <Button :text="'Load external data'"
-          :type="'TYPE_1'"
-          @specialEvent="onLoadExternalData"/>
+  <div class="toolbar">
+    <div>
+      <input  v-model="newItemText" 
+              @keyup.enter="onAdd">
+      <Button ref="buttonAdd"
+              :text="'Add'"
+              :type="'TYPE_1'"
+              :disabled="!bAEnabled"
+              @specialEvent="onAdd"/>
+      <Button ref="buttonRemove"
+              :text="'Remove all'"
+              :type="'TYPE_1'"
+              :disabled="!bREnabled"
+              @specialEvent="onRemoveAll"/>
+      <Button :text="showHideList"
+              :type="'TYPE_1'"
+              @specialEvent="showCompleted = !showCompleted"/>
+    </div>
+    <Button :text="'Load external data'"
+            :type="'TYPE_1'"
+            @specialEvent="onLoadExternalData"/>
+  </div>
   <TodoList
         ref="todoList"
   			:items="filteredItems"
@@ -103,3 +107,10 @@ async function onLoadExternalData() {
         @item-removed="onItemRemove"
         @item-changed="onItemChanged"/>
 </template>
+
+<style scoped>
+.toolbar {
+  display: flex;
+  justify-content: space-between;  
+}
+</style>

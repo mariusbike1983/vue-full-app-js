@@ -1,29 +1,27 @@
 function loadData() {
     const data = [];
     data.push(createNewTodoItem("Buy eggs"));
-    const newItem = createNewTodoItem("Do the dishes");
-    newItem.completed = true;
-    data.push(newItem);
+    data.push(createNewTodoItem("Do the dishes", true));
     return data;
 }
 
 async function loadExternalData() {
+    const response = await fetch('https://dummyjson.com/todos?limit=5');
+    const json = await response.json();
+    const todos = json.todos;
     const data = [];
-    const todos = await fetch('https://dummyjson.com/todos?limit=5')
-        .then(response => response.json())
-        .then(json => json.todos);
-    for(let i = 0; i<todos.length; i++) {
-        const item = createNewTodoItem(todos[i].todo);
-        item.completed = todos[i].completed;
+    todos.forEach(element => {
+        const item = createNewTodoItem(element.todo, element.completed);
         data.push(item);
-    }
+    });
     return data;
 }
 
-function createNewTodoItem(itemText) {
+function createNewTodoItem(itemText, itemCompleted) {
     return {
-        id:   _generateNextId(),
-        text: itemText
+        id:         _generateNextId(),
+        text:       itemText,
+        completed:  itemCompleted
     }
 }
 
