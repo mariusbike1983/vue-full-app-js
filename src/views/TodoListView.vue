@@ -1,38 +1,35 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import TodoList from '../components/TodoList.vue'
-import Button from '../components/Button.vue'
+import CustomButton from '../components/CustomButton.vue'
 import { loadData, createNewTodoItem , loadExternalData} from '../data/loaddata.js'
+import ModalDialog from '../components/ModalDialog.vue';
 
-const newItemText     = ref("")
-const items           = ref(loadData())
-const buttonAdd       = ref(null)
-const buttonRemove    = ref(null)
-const showCompleted   = ref(true)
-const bREnabled       = ref(false)
-const bAEnabled       = ref(false)
-const todoList        = ref(null)
-const showHideList    = computed(() => {
-	return showCompleted.value ? "Hide completed" : "Show completed"
-})
-const filteredItems   = computed(() => { 
-	return items.value.filter(item => showCompleted.value ? true: !item.completed)
-})
-const defaultPlaceholderText = "No items in list. Start adding one...";
+const defaultPlaceholderText  = "No items in list. Start adding one...";
+const newItemText             = ref("");
+const items                   = ref(loadData());
+const showCompleted           = ref(true);
+const bREnabled               = ref(false);
+const bAEnabled               = ref(false);
+
+const todoList                = ref(null);
+const modalDialog             = ref(null);
+const showHideList            = computed(() => showCompleted.value ? "Hide completed" : "Show completed");
+const filteredItems           = computed(() => items.value.filter(item => showCompleted.value ? true: !item.completed));
   
-watch(items, 
-  	(newValue, oldValue) => {
+watch(items, newValue => {
   		bREnabled.value = newValue.length > 0
 		},
   	{ deep: true, 
       immediate: true 
-    })
+    });
   
-watch(newItemText, 
-		(newValue, oldValue) => {
+watch(newItemText, newValue => {
     	bAEnabled.value = newValue.length > 0
   	},
-    { immediate: true })
+    { 
+      immediate: true 
+    });
 
 function onAdd() {
 	if (newItemText.value) {
@@ -43,18 +40,29 @@ function onAdd() {
 }
 
 function onRemoveAll() {
-	items.value.splice(0);
-  todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
+  const nrOfItems = items.value.length
+  modalDialog.value.show("Confirm", `Are you sure you want to remove all ${nrOfItems} items?`, "TYPE_1", ev => {
+    if (ev.currentTarget.returnValue === "DISMISS") {
+      return;
+    }
+    items.value.splice(0);
+    todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
+  });
 }
   
 function onItemRemove(data) {
-  const ndx = items.value.findIndex(el => el.id === data.id);
-  if (ndx >= 0) {
-  	items.value.splice(ndx, 1);
-  }
-  if (items.value.length === 0) {
-    todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
-  }
+  modalDialog.value.show("Confirm", "Are you sure you want to delete this item?", "TYPE_1", ev => {
+    if (ev.currentTarget.returnValue === "DISMISS") {
+      return;
+    }
+    const ndx = items.value.findIndex(el => el.id === data.id);
+    if (ndx >= 0) {
+      items.value.splice(ndx, 1);
+    }
+    if (items.value.length === 0) {
+      todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
+    }
+  });
 }
   
 function onItemChanged(data) {
@@ -82,30 +90,32 @@ async function onLoadExternalData() {
     <div>
       <input  v-model="newItemText" 
               @keyup.enter="onAdd">
-      <Button ref="buttonAdd"
+      <CustomButton ref="buttonAdd"
               :text="'Add'"
               :type="'TYPE_1'"
               :disabled="!bAEnabled"
               @specialEvent="onAdd"/>
-      <Button ref="buttonRemove"
+      <CustomButton ref="buttonRemove"
               :text="'Remove all'"
               :type="'TYPE_1'"
               :disabled="!bREnabled"
               @specialEvent="onRemoveAll"/>
-      <Button :text="showHideList"
+      <CustomButton :text="showHideList"
               :type="'TYPE_1'"
               @specialEvent="showCompleted = !showCompleted"/>
     </div>
-    <Button :text="'Load external data'"
+    <CustomButton 
+            :text="'Load external data'"
             :type="'TYPE_1'"
             @specialEvent="onLoadExternalData"/>
   </div>
   <TodoList
-        ref="todoList"
-  			:items="filteredItems"
-        :placeholderText="defaultPlaceholderText"
-        @item-removed="onItemRemove"
-        @item-changed="onItemChanged"/>
+          ref="todoList"
+          :items="filteredItems"
+          :placeholderText="defaultPlaceholderText"
+          @item-removed="onItemRemove"
+          @item-changed="onItemChanged"/>
+  <ModalDialog ref="modalDialog"/>
 </template>
 
 <style scoped>

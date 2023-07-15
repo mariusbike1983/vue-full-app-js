@@ -1,5 +1,5 @@
 <script setup>
-import Button from './Button.vue'
+import CustomButton from './CustomButton.vue'
   
 const props = defineProps({
   id				: 0,
@@ -30,7 +30,7 @@ function onItemChange() {
                 @change="onItemChange">
           <span> {{ text }} </span>
         </div>
-        <Button 
+        <CustomButton 
               :text='"-"'
               :type='"TYPE_2"'
               @specialEvent="onRemove"/>
