@@ -1,5 +1,6 @@
 <script setup>
-import CustomButton from './CustomButton.vue'
+import CustomButton from './CustomButton.vue';
+import { getImageUrl } from '../helpers/helpers.js';
   
 const props = defineProps({
   id				: 0,
@@ -31,8 +32,8 @@ function onItemChange() {
           <span> {{ text }} </span>
         </div>
         <CustomButton 
-              :text='"-"'
-              :type='"TYPE_2"'
+              :type="'TYPE_4'"
+              :icon="getImageUrl('delete.png')"
               @specialEvent="onRemove"/>
     </div>
 </template>

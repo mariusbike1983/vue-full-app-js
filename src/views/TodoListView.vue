@@ -4,6 +4,7 @@ import TodoList from '../components/TodoList.vue'
 import CustomButton from '../components/CustomButton.vue'
 import { loadData, createNewTodoItem , loadExternalData} from '../data/loaddata.js'
 import ModalDialog from '../components/ModalDialog.vue';
+import { getImageUrl } from '../helpers/helpers.js';
 
 const defaultPlaceholderText  = "No items in list. Start adding one...";
 const newItemText             = ref("");
@@ -41,8 +42,8 @@ function onAdd() {
 
 function onRemoveAll() {
   const nrOfItems = items.value.length
-  modalDialog.value.show("Confirm", `Are you sure you want to remove all ${nrOfItems} items?`, "TYPE_1", ev => {
-    if (ev.currentTarget.returnValue === "DISMISS") {
+  modalDialog.value.show("Confirm", `Are you sure you want to remove all ${nrOfItems} items?`, "QUESTION", ev => {
+    if (!ev.currentTarget.returnValue || ev.currentTarget.returnValue === "DISMISS") {
       return;
     }
     items.value.splice(0);
@@ -51,8 +52,8 @@ function onRemoveAll() {
 }
   
 function onItemRemove(data) {
-  modalDialog.value.show("Confirm", "Are you sure you want to delete this item?", "TYPE_1", ev => {
-    if (ev.currentTarget.returnValue === "DISMISS") {
+  modalDialog.value.show("Confirm", "Are you sure you want to delete this item?", "QUESTION", ev => {
+    if (!ev.currentTarget.returnValue || ev.currentTarget.returnValue === "DISMISS") {
       return;
     }
     const ndx = items.value.findIndex(el => el.id === data.id);
@@ -72,15 +73,20 @@ function onItemChanged(data) {
   }
 }
 
-async function onLoadExternalData() {
-  items.value.splice(0);
-  todoList.value.setTodoPlaceholderText("Loading...");
-  const newItems = await loadExternalData();
-  if (newItems.length > 0){
-    items.value.push(...newItems);
-  } else {
-    todoList.value.setTodoPlaceholderText("No elements loaded!");
-  }
+function onLoadExternalData() {
+  modalDialog.value.show("Information", "You are about to fetch data from an external site. Continue?", "INFORMATION", async ev => {
+    if (ev.currentTarget.returnValue === "YES") {
+      items.value.splice(0);
+      todoList.value.setTodoPlaceholderText("Loading...");
+      const newItems = await loadExternalData();
+      if (newItems.length > 0){
+        items.value.push(...newItems);
+      } else {
+        todoList.value.setTodoPlaceholderText("No elements loaded!");
+      }
+    }
+  });
+  
 }
 </script>
 

@@ -8,6 +8,7 @@ const props = defineProps({
 });
   
 const btnCls = computed(() => props.type.toLowerCase().replace("_", ""));
+
 </script>
 
 <template>
@@ -16,25 +17,18 @@ const btnCls = computed(() => props.type.toLowerCase().replace("_", ""));
       :class="btnCls"
       @click="$emit('specialEvent')">
       <img v-if="icon" :src="icon"/>
-    {{ text }}
+      <span v-if="text">{{ text }}</span>
   </button>
 </template>
 
 <style scoped>
-  button {
-  	margin-left: 5px;
-  }
-  
   .my-button:not(:disabled){
     cursor: pointer;
   }
   
   .type1 {
   	background-color: yellow;
-  }
-  
-  .type2 {
-  	background-color: red;
+    margin-left: 5px;
   }
 
   .type3 {
