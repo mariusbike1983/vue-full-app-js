@@ -1,6 +1,7 @@
 <script setup>
 import CustomButton from './CustomButton.vue';
 import { getImageUrl } from '../helpers/helpers.js';
+import { ref } from 'vue';
   
 const props = defineProps({
   id				: 0,
@@ -10,31 +11,69 @@ const props = defineProps({
   
 const emits = defineEmits([
   "item-removed",
-  "item-changed"
+  "item-changed",
+  "item-edit"
 ]);
+
+const editing = ref(false);
+const editingInput = ref(null);
+const itemTextValue = ref(props.text)
   
 function onRemove() {
   emits('item-removed', { id: props.id })
 }
   
-function onItemChange() {
+function onChange() {
   emits('item-changed', { id: props.id })
 }
+
+function onEdit() {
+  itemTextValue.value = props.text;
+  editing.value = true;
+  editingInput.value.focus();
+}
+
+function onCommitEditing() {
+  editing.value = false;
+  emits('item-edit', {id: props.id, text: itemTextValue.value});
+}
+
+function onDiscardChanges() {
+  editing.value = false;
+}
+
 </script>
 
 <template>
     <div class="item" 
         :class="{'is-completed': completed}">
         <div>
-          <input type="checkbox"
-                :checked="completed"
-                @change="onItemChange">
-          <span> {{ text }} </span>
+            <input type="checkbox"
+                  :checked="completed"
+                  @change="onChange">
+            <span v-show="!editing">
+              {{ text }}
+            </span>
+            <input v-show="editing" 
+                  ref="editingInput"
+                  id="itemedit"
+                  v-model="itemTextValue"
+                  @keydown.enter="onCommitEditing"
+                  @keydown.esc="onDiscardChanges"
+            >
         </div>
-        <CustomButton 
-              :type="'TYPE_4'"
-              :icon="getImageUrl('delete.png')"
-              @specialEvent="onRemove"/>
+        <div class="actions-container">
+          <CustomButton 
+                :type="'TYPE_4'"
+                :icon="getImageUrl('edit.png')"
+                :hint="'Edit'"
+                @specialEvent="onEdit"/>
+          <CustomButton 
+                :type="'TYPE_4'"
+                :icon="getImageUrl('delete.png')"
+                :hint="'Remove'"
+                @specialEvent="onRemove"/>
+        </div>
     </div>
 </template>
 
@@ -50,15 +89,23 @@ function onItemChange() {
     padding: 2px;
   }
   
-  .is-completed > span {
+  .item:hover {
+    border: 1px solid orange;
+    .actions-container {
+      visibility: visible;
+    }
+  }
+
+  .is-completed > div {
     text-decoration: line-through;
   }
   .is-completed {
     background-color: rgba(144, 238, 144, 0.2);
   }
-  
-  span {
-    margin-left: 5px;
-    margin-right: 10px;
+
+  .actions-container {
+    display: flex;
+    gap: 2px;
+    visibility: hidden;
   }
 </style>

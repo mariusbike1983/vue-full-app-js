@@ -2,9 +2,8 @@
 import { ref, watch, computed } from 'vue'
 import TodoList from '../components/TodoList.vue'
 import CustomButton from '../components/CustomButton.vue'
-import { loadData, createNewTodoItem , loadExternalData} from '../data/loaddata.js'
+import { loadData, createNewTodoItem , loadExternalData, storeData } from '../data/loaddata.js'
 import ModalDialog from '../components/ModalDialog.vue';
-import { getImageUrl } from '../helpers/helpers.js';
 
 const defaultPlaceholderText  = "No items in list. Start adding one...";
 const newItemText             = ref("");
@@ -19,18 +18,18 @@ const showHideList            = computed(() => showCompleted.value ? "Hide compl
 const filteredItems           = computed(() => items.value.filter(item => showCompleted.value ? true: !item.completed));
   
 watch(items, newValue => {
-  		bREnabled.value = newValue.length > 0
+  		bREnabled.value = newValue.length > 0;
+      storeData(newValue);
+      if (newValue.length === 0 && todoList.value) {
+        todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
+      }
 		},
-  	{ deep: true, 
+  	{ 
+      deep: true, 
       immediate: true 
     });
   
-watch(newItemText, newValue => {
-    	bAEnabled.value = newValue.length > 0
-  	},
-    { 
-      immediate: true 
-    });
+watch(newItemText, newValue => bAEnabled.value = newValue.length > 0, { immediate: true });
 
 function onAdd() {
 	if (newItemText.value) {
@@ -47,7 +46,6 @@ function onRemoveAll() {
       return;
     }
     items.value.splice(0);
-    todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
   });
 }
   
@@ -60,9 +58,6 @@ function onItemRemove(data) {
     if (ndx >= 0) {
       items.value.splice(ndx, 1);
     }
-    if (items.value.length === 0) {
-      todoList.value.setTodoPlaceholderText(defaultPlaceholderText);
-    }
   });
 }
   
@@ -70,6 +65,13 @@ function onItemChanged(data) {
 	const item = items.value.find(el => el.id === data.id);
   if (item) {
   	item.completed = !item.completed;
+  }
+}
+
+function onItemEdit(data) {
+  const item = items.value.find(el => el.id === data.id);
+  if (item) {
+    item.text = data.text;
   }
 }
 
@@ -120,7 +122,8 @@ function onLoadExternalData() {
           :items="filteredItems"
           :placeholderText="defaultPlaceholderText"
           @item-removed="onItemRemove"
-          @item-changed="onItemChanged"/>
+          @item-changed="onItemChanged"
+          @item-edit="onItemEdit"/>
   <ModalDialog ref="modalDialog"/>
 </template>
 

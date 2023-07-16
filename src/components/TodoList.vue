@@ -12,7 +12,8 @@ const placeholderTextValue = ref(props.placeholderText)
 
 const emits = defineEmits([
   'item-removed',
-  'item-changed'
+  'item-changed',
+  'item-edit'
 ])
 
 defineExpose({
@@ -20,11 +21,15 @@ defineExpose({
 })
 
 function onItemChanged(data) {
-  emits('item-changed', { id: data.id })
+  emits('item-changed', data.id);
 }
   
 function onItemRemoved(data) {
- 	emits('item-removed', { id: data.id })
+ 	emits('item-removed', data.id);
+}
+
+function onItemEdit(data) {
+  emits('item-edit', data);
 }
 </script>
 
@@ -34,8 +39,9 @@ function onItemRemoved(data) {
         :id="item.id"
         :text="item.text"
         :completed="item.completed"
-        @item-removed="onItemRemoved(item)"
-        @item-changed="onItemChanged(item)"/>
+        @item-removed="onItemRemoved"
+        @item-changed="onItemChanged"
+        @item-edit="onItemEdit"/>
     <span v-if="items.length === 0">{{ placeholderTextValue }}</span>
   </div>
 </template>

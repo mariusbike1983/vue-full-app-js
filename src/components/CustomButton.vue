@@ -4,6 +4,7 @@ import { computed } from 'vue'
 const props = defineProps({
   text: "",
   icon: "",
+  hint: "",
   type: 'TYPE_1' | 'TYPE_2' | 'TYPE_3' | 'TYPE_4'
 });
   
@@ -15,6 +16,7 @@ const btnCls = computed(() => props.type.toLowerCase().replace("_", ""));
 	<button 
       class="my-button" 
       :class="btnCls"
+      :title="hint"
       @click="$emit('specialEvent')">
       <img v-if="icon" :src="icon"/>
       <span v-if="text">{{ text }}</span>

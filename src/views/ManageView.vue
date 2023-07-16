@@ -1,5 +1,5 @@
 <template>
-<h1>About</h1>
+<h1>Manage todos per user</h1>
 </template>
 
 <style scoped>

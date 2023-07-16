@@ -1,8 +1,20 @@
+const storage_id = "TODOS";
+
 function loadData() {
-    const data = [];
-    data.push(createNewTodoItem("Buy eggs"));
-    data.push(createNewTodoItem("Do the dishes", true));
+    let content = localStorage.getItem(storage_id);
+    let data = [];
+    if (!content) {
+        data.push(createNewTodoItem("Buy eggs"));
+        data.push(createNewTodoItem("Do the dishes", true));
+        storeData(data);
+    } else {
+        data = JSON.parse(content);
+    }
     return data;
+}
+
+function storeData(data) {
+    localStorage.setItem(storage_id, JSON.stringify(data));
 }
 
 async function loadExternalData() {
@@ -33,4 +45,4 @@ function _generateNextId() {
     return window.nextId;
 }
 
-export { loadData, createNewTodoItem, loadExternalData }
+export { loadData, createNewTodoItem, loadExternalData, storeData }
