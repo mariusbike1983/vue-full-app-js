@@ -1,14 +1,15 @@
 <script setup> 
-import TodoItem from './TodoItem.vue'
-import { ref } from 'vue'
+import TodoItem from './TodoItem.vue';
+import { ref } from 'vue';
   
 const props = defineProps({
 	items:            [],
   placeholderText:  ""
 })
 
-const container = ref(null)
-const placeholderTextValue = ref(props.placeholderText)
+const container = ref(null);
+const placeholderTextValue = ref(props.placeholderText);
+const editingItem = ref(-1);
 
 const emits = defineEmits([
   'item-removed',
@@ -17,7 +18,7 @@ const emits = defineEmits([
 ])
 
 defineExpose({
-  setTodoPlaceholderText: text => { placeholderTextValue.value = text; }
+  setTodoPlaceholderText: text => placeholderTextValue.value = text
 })
 
 function onItemChanged(data) {
@@ -30,7 +31,20 @@ function onItemRemoved(data) {
 
 function onItemEdit(data) {
   emits('item-edit', data);
+  editingItem.value = -1;
 }
+
+function onItemEditing(data) {
+  editingItem.value = data ? data.id : -1;
+}
+
+function isItemReadonly(item) {
+  if (editingItem.value === -1) {
+    return false;
+  }
+  return item.id !== editingItem.value;
+}
+
 </script>
 
 <template>
@@ -39,8 +53,10 @@ function onItemEdit(data) {
         :id="item.id"
         :text="item.text"
         :completed="item.completed"
+        :read-only="isItemReadonly(item)"
         @item-removed="onItemRemoved"
         @item-changed="onItemChanged"
+        @item-editing="onItemEditing"
         @item-edit="onItemEdit"/>
     <span v-if="items.length === 0">{{ placeholderTextValue }}</span>
   </div>

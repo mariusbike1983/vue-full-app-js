@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TodoListView from '../views/TodoListView.vue'
+import { isUserAuthenticated } from '../helpers/security';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,12 @@ const router = createRouter({
       component: () => import('../views/Login.vue')
     }
   ]
-})
+});
+
+router.beforeEach((to, from) => {
+  if (!isUserAuthenticated() && to.name !== 'login') {
+    return { name: 'login' }
+  } 
+});
 
 export default router

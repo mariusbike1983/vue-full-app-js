@@ -6,13 +6,15 @@ import { ref } from 'vue';
 const props = defineProps({
   id				: 0,
   text			: "",
+  readOnly  : false,
   completed	: false
 });
   
 const emits = defineEmits([
   "item-removed",
   "item-changed",
-  "item-edit"
+  "item-edit",
+  "item-editing"
 ]);
 
 const editing = ref(false);
@@ -27,9 +29,11 @@ function onChange() {
   emits('item-changed', { id: props.id })
 }
 
-function onEdit() {
+function onEditing() {
+  emits('item-editing', { id: props.id });
   itemTextValue.value = props.text;
   editing.value = true;
+  editingInput.value.size = props.text.length;
   editingInput.value.focus();
 }
 
@@ -40,13 +44,14 @@ function onCommitEditing() {
 
 function onDiscardChanges() {
   editing.value = false;
+  emits('item-editing');
 }
 
 </script>
 
 <template>
     <div class="item" 
-        :class="{'is-completed': completed}">
+        :class="{'is-completed': completed, 'read-only': readOnly}">
         <div>
             <input type="checkbox"
                   :checked="completed"
@@ -67,11 +72,13 @@ function onDiscardChanges() {
                 :type="'TYPE_4'"
                 :icon="getImageUrl('edit.png')"
                 :hint="'Edit'"
-                @specialEvent="onEdit"/>
+                :disabled="editing"
+                @specialEvent="onEditing"/>
           <CustomButton 
                 :type="'TYPE_4'"
                 :icon="getImageUrl('delete.png')"
                 :hint="'Remove'"
+                :disabled="editing"
                 @specialEvent="onRemove"/>
         </div>
     </div>
@@ -82,15 +89,15 @@ function onDiscardChanges() {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border: 1px solid gray;
+    border: 2px solid slategray;
     border-radius: 5px;
     background-color: lightgreen;
     margin: 5px;
     padding: 2px;
   }
   
-  .item:hover {
-    border: 1px solid orange;
+  .item:hover:not(.read-only) {
+    border: 2px solid orange;
     .actions-container {
       visibility: visible;
     }
