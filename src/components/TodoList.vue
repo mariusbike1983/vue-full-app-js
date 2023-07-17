@@ -21,11 +21,11 @@ defineExpose({
 })
 
 function onItemChanged(data) {
-  emits('item-changed', data.id);
+  emits('item-changed', data);
 }
   
 function onItemRemoved(data) {
- 	emits('item-removed', data.id);
+ 	emits('item-removed', data);
 }
 
 function onItemEdit(data) {
