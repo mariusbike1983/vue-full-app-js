@@ -105,21 +105,21 @@ const isQuestion = computed(() => mType.value === "QUESTION")
     dialog {
         padding: 0px;
         overflow: hidden;
-        border: 2px solid darkgray;
+        border: 2px solid slategray;
     }
     header {
         display: flex;
         padding: 5px;
         justify-content: space-between;
         background-color: antiquewhite;
-        border-bottom: 2px solid orange;
+        border-bottom: 2px solid orangered;
     }
     footer {
         padding: 5px;
         display: flex;
         justify-content: flex-end;
         background-color: antiquewhite;
-        border-top: 1px solid orange;
+        border-top: 2px solid orangered;
     }
     .container {
         padding: 10px;

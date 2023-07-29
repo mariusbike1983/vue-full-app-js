@@ -66,7 +66,7 @@ function onItemSelect(data) {
         @item-attempt-editing="onItemAttemptEditing"
         @item-commit-edit="onItemEdit"
         @item-select="onItemSelect"/>
-    <span v-if="items.length === 0">{{ placeholderTextValue }}</span>
+    <span class="placeholder" v-if="items.length === 0">{{ placeholderTextValue }}</span>
   </div>
 </template>
 
@@ -80,5 +80,10 @@ function onItemSelect(data) {
     background-color: rgb(220, 236, 241);
     border: 1px solid slategray;
     border-radius: 5px;
+    min-height: 50px;
+  }
+
+  .placeholder {
+    opacity: 0.5;
   }
 </style>
