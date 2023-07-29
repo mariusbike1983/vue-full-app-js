@@ -77,7 +77,11 @@ function onItemEdit(data) {
 
 function onItemSelected(data) {
   items.value.forEach(element => {
-      element.selected = element.id === data.id;
+      if (element.id === data.id) {
+        element.selected = !element.selected;
+      } else {
+        element.selected = false;
+      }
   });
 }
 

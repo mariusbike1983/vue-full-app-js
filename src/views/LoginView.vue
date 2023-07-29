@@ -49,6 +49,7 @@ watch([username, password], () => {
 </script>
 
 <template>
+    <h1>Login</h1>
     <div class="login-page">
         <div>
             <div class="container">
