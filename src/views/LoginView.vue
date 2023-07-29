@@ -42,6 +42,10 @@ function blurPassword() {
     passwordFieldFocus.value = false;
 }
 
+watch([username, password], () => {
+    isError.value = "";
+});
+
 </script>
 
 <template>
