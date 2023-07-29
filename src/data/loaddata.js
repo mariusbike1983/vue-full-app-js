@@ -29,10 +29,14 @@ async function loadExternalData() {
     return data;
 }
 
-function createNewTodoItem(itemText, itemCompleted) {
+function createNewTodoItem(itemText, itemCompleted, itemDetails) {
+    if (!itemDetails) {
+        itemDetails = "Created at: " + new Date();
+    }
     return {
         id:         _generateNextId(),
         text:       itemText,
+        details:    itemDetails,
         completed:  itemCompleted
     }
 }

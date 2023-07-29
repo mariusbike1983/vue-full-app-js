@@ -11,10 +11,17 @@ function logInUser(userId) {
     const secObj = _getCurrentSecurityObj();
     if (!secObj) {
         localStorage.removeItem(authUserId);
-        localStorage.setItem(authUserId, JSON.stringify({ id: userId }));
+        localStorage.setItem(authUserId, JSON.stringify({ 
+            id: userId,
+            date: new Date()
+        }));
     } else {
         throw new Error("Auth log in err");
     }
+}
+
+function logout() {
+    localStorage.removeItem(authUserId);    
 }
 
 function getCurrentUserId() {
@@ -34,4 +41,4 @@ function _getCurrentSecurityObj() {
     return securityObj;
 }
 
-export { isUserAuthenticated, getCurrentUserId, logInUser }
+export { isUserAuthenticated, getCurrentUserId, logInUser, logout }

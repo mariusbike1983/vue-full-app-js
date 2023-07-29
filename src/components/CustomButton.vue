@@ -29,7 +29,7 @@ const btnCls = computed(() => props.type.toLowerCase().replace("_", ""));
   }
   
   .type1 {
-  	background-color: yellow;
+  	background-color: orange;
     margin-left: 5px;
   }
 

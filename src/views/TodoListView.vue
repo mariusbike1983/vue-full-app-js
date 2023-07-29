@@ -75,6 +75,12 @@ function onItemEdit(data) {
   }
 }
 
+function onItemSelected(data) {
+  items.value.forEach(element => {
+      element.selected = element.id === data.id;
+  });
+}
+
 function onLoadExternalData() {
   modalDialog.value.show("Information", "You are about to fetch data from an external site. Continue?", "INFORMATION", async ev => {
     if (ev.currentTarget.returnValue === "YES") {
@@ -123,6 +129,7 @@ function onLoadExternalData() {
           :placeholderText="defaultPlaceholderText"
           @item-removed="onItemRemove"
           @item-changed="onItemChanged"
+          @item-select="onItemSelected"
           @item-edit="onItemEdit"/>
   <ModalDialog ref="modalDialog"/>
 </template>
