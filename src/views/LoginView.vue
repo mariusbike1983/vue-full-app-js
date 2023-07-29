@@ -85,9 +85,16 @@ function blurPassword() {
 }
 
 .form-element.active {
-    border: 2px solid black;
+    outline: none;
+    border: 2px solid orange;
     border-radius: 3px;
 }
+.form-element:focus {
+    outline: none;
+    border: 2px solid orange;
+    border-radius: 3px;
+}
+
 .container {
     display: grid;
     column-gap: 10px;
