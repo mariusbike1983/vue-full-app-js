@@ -24,7 +24,7 @@ function doLogIn() {
         if (!username.value || !password.value) {
             isError.value="Username or password must be filled in!";
         } else {
-            logInUser(dummyUserId);
+            logInUser(username.value, password.value);
             router.push("/");
         }
     } catch(err) {
