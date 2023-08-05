@@ -17,6 +17,15 @@ const securityStore = reactive({
     auth._logout();
     this.isUserLoggedIn = false;
     this.isUserAdmin = false;
+  },
+
+  init() {
+    const secObj = auth._getCurrentSecurityObj();
+    if (secObj) {
+      this.isUserLoggedIn = true;
+      const role = auth._getRoleForCurrentLoggedInUser();
+      this.isUserAdmin = "ADMIN" === role;  
+    }
   }
 });
 

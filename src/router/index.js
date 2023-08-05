@@ -32,9 +32,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-  if (to.name == 'login') {
-    securityStore.logOut();
-  }
   if (!securityStore.isUserLoggedIn && to.name !== 'login') {
     return { name: 'login' }
   } 
