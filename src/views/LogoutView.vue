@@ -6,7 +6,7 @@ import router from '../router';
 onMounted(() => {
     securityStore.logOut();
     setTimeout(() => {
-        router.push('/');
+        router.push('/login');
     }, 1000);
 });
 </script>

@@ -77,8 +77,8 @@ function onItemSelect(data) {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    background-color: rgb(220, 236, 241);
-    border: 1px solid slategray;
+    background-color: antiquewhite;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     min-height: 35px;
   }

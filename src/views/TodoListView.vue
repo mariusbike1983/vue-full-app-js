@@ -4,6 +4,7 @@ import TodoList from '../components/TodoList.vue'
 import CustomButton from '../components/CustomButton.vue'
 import { loadData, createNewTodoItem , loadExternalData, storeData } from '../data/loaddata.js'
 import ModalDialog from '../components/ModalDialog.vue';
+import { securityStore } from '../helpers/security';
 
 const defaultPlaceholderText  = "No items in list. Start adding one...";
 const newItemText             = ref("");
@@ -90,7 +91,7 @@ function onLoadExternalData() {
     if (ev.currentTarget.returnValue === "YES") {
       items.value.splice(0);
       todoList.value.setTodoPlaceholderText("Loading...");
-      const newItems = await loadExternalData();
+      const newItems = await loadExternalData(securityStore.getCurrentLoggedInUserId());
       if (newItems.length > 0){
         items.value.push(...newItems);
       } else {

@@ -1,7 +1,14 @@
+import { securityStore } from "../helpers/security";
+
 const storage_id = "TODOS";
 
+function getStorageId() {
+    const userId = securityStore.getCurrentLoggedInUserId();
+    return storage_id+":"+userId;
+}
+
 function loadData() {
-    let content = localStorage.getItem(storage_id);
+    let content = localStorage.getItem(getStorageId());
     let data = [];
     if (!content) {
         data.push(createNewTodoItem("Buy eggs"));
@@ -14,11 +21,11 @@ function loadData() {
 }
 
 function storeData(data) {
-    localStorage.setItem(storage_id, JSON.stringify(data));
+    localStorage.setItem(getStorageId(), JSON.stringify(data));
 }
 
-async function loadExternalData() {
-    const response = await fetch('https://dummyjson.com/todos?limit=5');
+async function loadExternalData(userid) {
+    const response = await fetch('https://dummyjson.com/todos/user/'+userid+'?limit=5');
     const json = await response.json();
     const todos = json.todos;
     const data = [];
@@ -26,6 +33,7 @@ async function loadExternalData() {
         const item = createNewTodoItem(element.todo, element.completed);
         data.push(item);
     });
+    storeData(data);
     return data;
 }
 
