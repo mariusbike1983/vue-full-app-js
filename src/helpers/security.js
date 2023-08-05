@@ -1,27 +1,39 @@
-const authUserId = "userIdAuth";
-const usersData = "usersData";
+const __AUTH_USER_ID = "userIdAuth";
+const __USERS_DATA   = "usersData";
 
-function isUserAuthenticated() {
-    const secObj = _getCurrentSecurityObj();
-    if (!secObj || !secObj.id) {
-        return false;
-    }
-    return true;
+import { reactive } from 'vue';
+
+const securityStore = reactive({
+  isUserLoggedIn: false,
+  isUserAdmin: false,
+
+  logInUser(username, password) {
+    _logInUser(username, password);
+    this.isUserLoggedIn = true;
+    const role = _getRoleForCurrentLoggedInUser();
+    this.isUserAdmin = "ADMIN" === role;
+  },
+
+  logOut() {
+    localStorage.removeItem(__AUTH_USER_ID);
+    this.isUserLoggedIn = false;
+    this.isUserAdmin = false;
+  }
+});
+
+function _getRoleForCurrentLoggedInUser() {
+const secObj = _getCurrentSecurityObj();
+if (!secObj) {
+    return null;
+}
+return _getUserObjFoId(secObj.id).role;
 }
 
-function getRoleForUser(userId) {
-    const secObj = _getCurrentSecurityObj();
-    if (!secObj || secObj.id !== userId) {
-        return null;
-    }
-    return _getUserObjFoId(userId).role;
-}
-
-function logInUser(username, password) {
+function _logInUser(username, password) {
     const userObj = _getUserObj(username, password);
     if (userObj) {
-        localStorage.removeItem(authUserId);
-        localStorage.setItem(authUserId, JSON.stringify({ 
+        localStorage.removeItem(__AUTH_USER_ID);
+        localStorage.setItem(__AUTH_USER_ID, JSON.stringify({ 
             id: userObj.id,
             date: new Date()
         }));
@@ -30,18 +42,8 @@ function logInUser(username, password) {
     }
 }
 
-function logout() {
-    localStorage.removeItem(authUserId);    
-}
-
-function getCurrentUserId() {
-    const obj = _getCurrentSecurityObj();
-
-    return obj ? obj.id : -1;
-}
-
 function _getCurrentSecurityObj() {
-    const securityObj = localStorage.getItem(authUserId);
+    const securityObj = localStorage.getItem(__AUTH_USER_ID);
     if (!securityObj) {
         return null;
     }
@@ -52,8 +54,33 @@ function _getCurrentSecurityObj() {
     return authUserIdData;
 }
 
+
+function _getUserObj(username, password) {
+    let usersDataObj = localStorage.getItem(__USERS_DATA);
+    if (usersDataObj) {
+        return JSON.parse(usersDataObj).find(elem => {
+            if (elem.username === username && elem.password === password) {
+                return elem;
+            }
+        });
+    }
+    return null;
+}
+
+function _getUserObjFoId(id) {
+    let usersDataObj = localStorage.getItem(__USERS_DATA);
+    if (usersDataObj) {
+        return JSON.parse(usersDataObj).find(elem => {
+            if (elem.id === id) {
+                return elem;
+            }
+        });
+    }
+    return null;
+}
+
 function initUserWithRoles() {
-    let usersDataObj = localStorage.getItem(usersData);
+    let usersDataObj = localStorage.getItem(__USERS_DATA);
     if (!usersDataObj) {
         usersDataObj = [
             {
@@ -69,40 +96,9 @@ function initUserWithRoles() {
                 password:   "user2"
             }
         ];
-        localStorage.setItem(usersData, JSON.stringify(usersDataObj));
+        localStorage.setItem(__USERS_DATA, JSON.stringify(usersDataObj));
     }
     return usersDataObj;
 }
 
-function _getUserObj(username, password) {
-    let usersDataObj = localStorage.getItem(usersData);
-    if (usersDataObj) {
-        return JSON.parse(usersDataObj).find(elem => {
-            if (elem.username === username && elem.password === password) {
-                return elem;
-            }
-        });
-    }
-    return null;
-}
-
-function _getUserObjFoId(id) {
-    let usersDataObj = localStorage.getItem(usersData);
-    if (usersDataObj) {
-        return JSON.parse(usersDataObj).find(elem => {
-            if (elem.id === id) {
-                return elem;
-            }
-        });
-    }
-    return null;
-}
-
-function getAuthUserPriviles() {
-    const loggedInUser = _getCurrentSecurityObj();
-    if (loggedInUser) {
-
-    }
-}
-
-export { initUserWithRoles, isUserAuthenticated, getCurrentUserId, logInUser, logout, getRoleForUser }
+export { initUserWithRoles, securityStore}

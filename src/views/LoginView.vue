@@ -1,11 +1,10 @@
 <script setup>
-import { logInUser } from '../helpers/security';
+import { securityStore } from '../helpers/security';
 import { useRouter } from 'vue-router';
 import { ref, computed, watch } from 'vue';
 import { getImageUrl } from '../helpers/helpers.js';
 
 const router = useRouter();
-const dummyUserId = 1;
 const isError = ref("");
 const username = ref("");
 const password = ref("");
@@ -24,7 +23,7 @@ function doLogIn() {
         if (!username.value || !password.value) {
             isError.value="Username or password must be filled in!";
         } else {
-            logInUser(username.value, password.value);
+            securityStore.logInUser(username.value, password.value);
             router.push("/");
         }
     } catch(err) {

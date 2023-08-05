@@ -1,10 +1,10 @@
 <script setup>
 import { onMounted } from 'vue';
-import { logout } from '../helpers/security';
+import { securityStore } from '../helpers/security';
 import router from '../router';
 
 onMounted(() => {
-    logout();
+    securityStore.logOut();
     setTimeout(() => {
         router.push('/');
     }, 1000);
