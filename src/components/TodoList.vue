@@ -80,7 +80,7 @@ function onItemSelect(data) {
     background-color: antiquewhite;
     border: 1px solid var(--border-color);
     border-radius: 5px;
-    min-height: 35px;
+    min-height: 24px;
   }
 
   .placeholder {

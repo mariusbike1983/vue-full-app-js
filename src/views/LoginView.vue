@@ -53,13 +53,17 @@ watch([username, password], () => {
         <div>
             <div class="container">
                 <span class="element">Username</span> 
-                <input class="form-element" v-model="username">
+                <input 
+                    class="form-element" 
+                    v-model="username"
+                    @keypress.enter="doLogIn">
                 <span class="element">Password</span> 
                 <div class="form-element" :class="{active: passwordFieldFocus}">
                     <input id="password" 
                         ref="passwordField"
                         :type="passFieldType" 
                         v-model="password" 
+                        @keypress.enter="doLogIn"
                         @focus="focusPassword" 
                         @blur="blurPassword">
                     <span v-show="password"><img :src="passImg" @click="toggleShowPassword"></span>

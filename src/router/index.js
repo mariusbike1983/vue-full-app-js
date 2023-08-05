@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TodoListView from '../views/TodoListView.vue'
 import { securityStore } from '../helpers/security';
 
 const router = createRouter({
@@ -8,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'todolist',
-      component: TodoListView
+      component: () => import('../views/TodoListView.vue')
     },
     {
       path: '/manage',
