@@ -3,6 +3,7 @@ import { ref, onMounted, nextTick } from 'vue';
 import router from '../router';
 import { securityStore } from '../helpers/security';
 import ModalDialog from './ModalDialog.vue';
+import { onBeforeRouteUpdate } from 'vue-router';
 
 const fullname = ref("");
 const userdetails = ref("");
@@ -42,13 +43,14 @@ onMounted(() => {
     fullname.value = obj.fullName;
     userdetails.value = obj.userDetails;
 });
+
 </script>
 
 <template>
     <div class="user-menu-button" @click.stop.prevent="toggle($event)">
         <div class="title">{{ fullname }}</div>
         <div class="details"> {{ userdetails }}</div>
-        <div v-show="dropdownVisible" 
+        <div v-show="dropdownVisible"
             ref="dropdown" 
             class="dropdown">
             <span class="elem" @click="myprofile">My profile</span>
@@ -86,6 +88,8 @@ onMounted(() => {
         display: flex;
         align-items: flex-end;
         padding-right: 5px;
+        padding-bottom: 3px;
+        padding-top: 3px;
         flex-direction: column;
         gap: 5px;
         background-color: #ffffff66;

@@ -74,6 +74,19 @@ const auth = {
         }
     },
 
+    getUsersData() {
+        let usersDataObj = localStorage.getItem(this.__USERS_DATA);
+        if (usersDataObj) {
+            const usersData = JSON.parse(usersDataObj);
+            return usersData;
+        }
+        return [];
+    },
+
+    insertUserData(userData) {
+        
+    },
+
     initUserWithRoles() {
         let usersDataObj = localStorage.getItem(this.__USERS_DATA);
         if (!usersDataObj) {

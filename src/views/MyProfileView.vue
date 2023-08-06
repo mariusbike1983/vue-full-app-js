@@ -5,7 +5,6 @@ import router from '../router';
 import ModalDialog from '../components/ModalDialog.vue';
 
 const fullName = ref(securityStore.getCurrentLoggedInUserDetails().fullName);
-const isAdmin = ref(securityStore.isUserAdmin);
 const modalDialog = ref(null);
 
 function save() {
@@ -32,7 +31,7 @@ function save() {
             <span>Full name</span>
             <input v-model="fullName">
             <span>Is admin</span>
-            <input type="checkbox" v-model="isAdmin">
+            <input type="checkbox" v-model="isAdmin" disabled>
             <div class="buttons-container">
                 <button @click="save">Save</button>
             </div>
