@@ -13,6 +13,26 @@ const securityStore = reactive({
     this.isUserAdmin = "ADMIN" === role;
   },
 
+  getCurrentLoggedInUserDetails() {
+    if (this.isUserLoggedIn) {
+      const id = this.getCurrentLoggedInUserId();
+      const obj = auth._getUserObjFoId(id);
+      return {
+        fullName: obj.fullname,
+        userDetails: obj.username
+      }
+    }
+  },
+
+  setCurrentLoggedInUserDetails(newData) {
+    const id = this.getCurrentLoggedInUserId();
+    const updateData = {
+      id: id,
+      ...newData
+    }
+    auth._updateObjForId(updateData);
+  },
+
   logOut() {
     auth._logout();
     this.isUserLoggedIn = false;

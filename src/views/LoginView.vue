@@ -50,7 +50,6 @@ watch([username, password], () => {
 <template>
     <h1>Login</h1>
     <div class="login-page">
-        <div>
             <div class="container">
                 <span class="element">Username</span> 
                 <input 
@@ -68,14 +67,13 @@ watch([username, password], () => {
                         @blur="blurPassword">
                     <span v-show="password"><img :src="passImg" @click="toggleShowPassword"></span>
                 </div>
-            </div>
-            <div class="error-container"> {{ isError }}</div>
-            <div class="buttons-container">
-                <button @click="doLogIn">Log in</button>
-                <button @click="doRegister">Register</button>
+                <div class="error-container"> {{ isError }}</div>
+                <div class="buttons-container">
+                    <button @click="doLogIn">Log in</button>
+                    <button @click="doRegister">Register</button>
+                </div>
             </div>
         </div>
-    </div>
 </template>
 
 <style scoped>
@@ -88,18 +86,18 @@ watch([username, password], () => {
 
 .form-element {
     display: flex;
-    border: 2px solid slategray;
+    border: 2px solid var(--border-color);
     height: 20px;
 }
 
 .form-element.active {
     outline: none;
-    border: 2px solid orange;
+    border: 2px solid var(--selected);
     border-radius: 3px;
 }
 .form-element:focus {
     outline: none;
-    border: 2px solid orange;
+    border: 2px solid var(--selected);
     border-radius: 3px;
 }
 
@@ -114,14 +112,13 @@ watch([username, password], () => {
 
 .buttons-container {
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 10px;
+    grid-column: span 2;
 }
 
 .login-page {
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
@@ -130,6 +127,7 @@ watch([username, password], () => {
     padding-bottom: 10px;
     color: salmon;
     font-weight: bolder;
+    grid-column: span 2;
 }
 
 </style>

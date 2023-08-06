@@ -63,6 +63,17 @@ const auth = {
         return null;
     },
 
+    _updateObjForId: function(newData) {
+        let usersDataObj = localStorage.getItem(this.__USERS_DATA);
+        if (usersDataObj) {
+            const usersData = JSON.parse(usersDataObj);
+            const elem = usersData.find(elem => elem.id === newData.id);
+            elem.fullname = newData.fullName;
+            elem.role = newData.isAdmin ? "ADMIN":"STANDARD";
+            localStorage.setItem(this.__USERS_DATA, JSON.stringify(usersData));
+        }
+    },
+
     initUserWithRoles() {
         let usersDataObj = localStorage.getItem(this.__USERS_DATA);
         if (!usersDataObj) {
@@ -71,16 +82,18 @@ const auth = {
                     id:         1,
                     role:       "ADMIN",
                     username:   "user1",
+                    fullname:   "Marius",
                     password:   "user1"
                 },
                 {
                     id:         2,
                     role:       "STANDARD",
                     username:   "user2",
+                    fullname:   "Adrian",
                     password:   "user2"
                 }
             ];
-            localStorage.setItem(__USERS_DATA, JSON.stringify(usersDataObj));
+            localStorage.setItem(this.__USERS_DATA, JSON.stringify(usersDataObj));
         }
         return usersDataObj;
     }
