@@ -33,6 +33,7 @@ nav {
     padding: 3px;
     display: flex;
     background-color: lightgray;
+    border-radius: 5px;;
 }
 
 .container1 {

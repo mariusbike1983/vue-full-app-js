@@ -51,9 +51,9 @@ onMounted(() => {
         <div v-show="dropdownVisible" 
             ref="dropdown" 
             class="dropdown">
-            <div class="elem" @click="myprofile">My profile</div>
-            <div class="elem">Change password</div>
-            <div class="elem" @click="logout">Logout</div>
+            <span class="elem" @click="myprofile">My profile</span>
+            <span class="elem">Change password</span>
+            <span class="elem" @click="logout">Logout</span>
         </div>
         <ModalDialog ref="modalDialog"/>
     </div>
@@ -84,14 +84,16 @@ onMounted(() => {
         width: 150px;
         position: absolute;
         display: flex;
+        align-items: flex-end;
         padding-right: 5px;
         flex-direction: column;
         gap: 5px;
-        background-color: var(--background-color);
+        background-color: #ffffff66;
+        border: 2px solid var(--border-color);
+        border-radius: 5px;
     }
+
     .elem {        
-        display: flex;
-        justify-content: end;
         border-bottom: 2px solid transparent;
     }
 
